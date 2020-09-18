@@ -59,15 +59,14 @@ def extract_json_data(html):
     return json.loads(raw_string)
 
 
-
-def put_filter_on_photos():
-
-
+def put_filter_on_photo(img_url):
+    print(img_url)
 
 
 def main():
     instagram_data = get_instagram_posts_from_profile('jakobowsky')
-
+    for ig_post in instagram_data:
+        put_filter_on_photo(ig_post['photo_url'])
 
 
 if __name__ == '__main__':
