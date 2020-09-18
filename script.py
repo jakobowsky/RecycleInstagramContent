@@ -1,6 +1,10 @@
 import json
 import requests
 from bs4 import BeautifulSoup
+import os
+import errno
+from filter_photo import put_filter_and_save_photo
+from paraphrase import get_paraphrase
 
 
 def profile_page_recent_posts(json_data_from_profile):
@@ -59,14 +63,39 @@ def extract_json_data(html):
     return json.loads(raw_string)
 
 
-def put_filter_on_photo(img_url):
-    print(img_url)
+def put_filter_on_photo(img_url, number):
+    img_data = requests.get(img_url).content
+    filename = f'content/{number}/{number}.jpg'
+    if not os.path.exists(os.path.dirname(filename)):
+        try:
+            os.makedirs(os.path.dirname(filename))
+        except OSError as exc:  # Guard against race condition
+            if exc.errno != errno.EEXIST:
+                raise
+
+    with open(filename, 'wb') as handler:
+        handler.write(img_data)
+
+    put_filter_and_save_photo(filename)
+
+
+def get_and_save_paraphrase(text, number):
+    filename = f'content/{number}/{number}.txt'
+    edited = f'content/{number}/{number}_edited.txt'
+    paraphrase = get_paraphrase(text)
+    with open(filename, 'w') as f:
+        f.write(text)
+    with open(edited, 'w') as f:
+        f.write(paraphrase)
 
 
 def main():
     instagram_data = get_instagram_posts_from_profile('jakobowsky')
+    number = 0
     for ig_post in instagram_data:
-        put_filter_on_photo(ig_post['photo_url'])
+        put_filter_on_photo(ig_post['photo_url'], number)
+        get_and_save_paraphrase(ig_post['text'], number)
+        number += 1
 
 
 if __name__ == '__main__':

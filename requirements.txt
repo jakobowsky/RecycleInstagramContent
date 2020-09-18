@@ -1,6 +1,9 @@
 beautifulsoup4==4.9.1
 certifi==2020.6.20
 chardet==3.0.4
+colorama==0.4.3
+configparser==5.0.0
+crayons==0.4.0
 cycler==0.10.0
 decorator==4.4.2
 idna==2.10
@@ -16,7 +19,9 @@ PyWavelets==1.1.1
 requests==2.24.0
 scikit-image==0.17.2
 scipy==1.5.2
+selenium==3.141.0
 six==1.15.0
 soupsieve==2.0.1
 tifffile==2020.9.3
 urllib3==1.25.10
+webdriver-manager==3.2.2
